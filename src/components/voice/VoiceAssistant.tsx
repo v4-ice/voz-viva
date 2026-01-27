@@ -135,7 +135,13 @@ export function VoiceAssistant({ isOpen, onClose, onListeningChange }: VoiceAssi
 
   useEffect(() => {
     if (isOpen) {
-      speakText("Olá! Sou o assistente de voz da Ouvidoria. Diga para onde deseja ir, como perfil, manifestar-se, comunidade ou minhas respostas. Ou faça uma pergunta.");
+      const welcomeMessage = `Olá! Bem-vindo ao aplicativo Ouvidoria GDF, o canal oficial de ouvidoria do Governo do Distrito Federal. 
+      Aqui você pode registrar reclamações, denúncias, sugestões, elogios e pedidos de informação sobre serviços públicos como transporte, saúde, educação e segurança.
+      Para usar, diga para onde deseja ir: perfil, manifestar-se, comunidade ou minhas respostas. 
+      Na manifestação, você pode falar e o texto será escrito automaticamente.
+      Para críticas ou sugestões sobre o app, faça uma manifestação direcionada para Comunicação Social, ou envie email para ouvidoria@planopiloto.df.gov.br, ou ligue 162.
+      Como posso ajudar?`;
+      speakText(welcomeMessage);
     }
   }, [isOpen, speakText]);
 

@@ -12,6 +12,9 @@ import ManifestarConfirmacaoPage from "./pages/ManifestarConfirmacaoPage";
 import ComunidadePage from "./pages/ComunidadePage";
 import PostDetalhePage from "./pages/PostDetalhePage";
 import MinhasRespostasPage from "./pages/MinhasRespostasPage";
+import ConfiguracoesPage from "./pages/ConfiguracoesPage";
+import IdiomasPage from "./pages/IdiomasPage";
+import AcessibilidadePage from "./pages/AcessibilidadePage";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +33,9 @@ const App = () => (
           <Route path="/comunidade" element={<ComunidadePage />} />
           <Route path="/comunidade/:id" element={<PostDetalhePage />} />
           <Route path="/minhas-respostas" element={<MinhasRespostasPage />} />
+          <Route path="/configuracoes" element={<ConfiguracoesPage />} />
+          <Route path="/idiomas" element={<IdiomasPage />} />
+          <Route path="/acessibilidade" element={<AcessibilidadePage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

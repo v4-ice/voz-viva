@@ -48,6 +48,7 @@ export type Database = {
       }
       manifestacoes: {
         Row: {
+          anexos: string[] | null
           assunto: string
           created_at: string
           divulgacoes: number
@@ -61,6 +62,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          anexos?: string[] | null
           assunto: string
           created_at?: string
           divulgacoes?: number
@@ -74,6 +76,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          anexos?: string[] | null
           assunto?: string
           created_at?: string
           divulgacoes?: number

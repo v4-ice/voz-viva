@@ -1,13 +1,21 @@
 import { useState, useCallback } from "react";
-import { Mic, MicOff, Paperclip } from "lucide-react";
+import { Mic, MicOff } from "lucide-react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { FileUpload } from "@/components/manifestar/FileUpload";
+
+interface UploadedFile {
+  url: string;
+  name: string;
+  type: "image" | "video";
+}
 
 export default function ManifestarPage() {
   const [texto, setTexto] = useState("");
   const [isListening, setIsListening] = useState(false);
+  const [anexos, setAnexos] = useState<UploadedFile[]>([]);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -70,7 +78,12 @@ export default function ManifestarPage() {
       });
       return;
     }
-    navigate("/manifestar/assunto", { state: { texto } });
+    navigate("/manifestar/assunto", { 
+      state: { 
+        texto, 
+        anexos: anexos.map(a => a.url) 
+      } 
+    });
   };
 
   return (
@@ -121,6 +134,23 @@ export default function ManifestarPage() {
           <p className="text-foreground/60 text-sm mt-2">
             {texto.length} / 20 caracteres mínimos
           </p>
+        </motion.div>
+
+        {/* File Upload Section */}
+        <motion.div
+          className="mt-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+        >
+          <label className="text-foreground text-sm tracking-wide block mb-3">
+            Anexar imagens ou vídeos (opcional):
+          </label>
+          <FileUpload 
+            files={anexos} 
+            onFilesChange={setAnexos}
+            maxFiles={5}
+          />
         </motion.div>
 
         <motion.div

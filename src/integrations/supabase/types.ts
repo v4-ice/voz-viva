@@ -44,6 +44,13 @@ export type Database = {
             referencedRelation: "manifestacoes"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "comentarios_manifestacao_id_fkey"
+            columns: ["manifestacao_id"]
+            isOneToOne: false
+            referencedRelation: "manifestacoes_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       manifestacoes: {
@@ -163,17 +170,92 @@ export type Database = {
             referencedRelation: "manifestacoes"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "respostas_manifestacao_id_fkey"
+            columns: ["manifestacao_id"]
+            isOneToOne: false
+            referencedRelation: "manifestacoes_public"
+            referencedColumns: ["id"]
+          },
         ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
       }
     }
     Views: {
-      [_ in never]: never
+      manifestacoes_public: {
+        Row: {
+          anexos: string[] | null
+          assunto: string | null
+          created_at: string | null
+          divulgacoes: number | null
+          id: string | null
+          localidade: string | null
+          protocolo: string | null
+          respondida: boolean | null
+          status: string | null
+          texto: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          anexos?: string[] | null
+          assunto?: string | null
+          created_at?: string | null
+          divulgacoes?: number | null
+          id?: string | null
+          localidade?: string | null
+          protocolo?: string | null
+          respondida?: boolean | null
+          status?: string | null
+          texto?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          anexos?: string[] | null
+          assunto?: string | null
+          created_at?: string | null
+          divulgacoes?: number | null
+          id?: string | null
+          localidade?: string | null
+          protocolo?: string | null
+          respondida?: boolean | null
+          status?: string | null
+          texto?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -300,6 +382,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+    },
   },
 } as const

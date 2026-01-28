@@ -19,9 +19,9 @@ export function Header({ title = "Ouvidoria", subtitle = "GDF" }: HeaderProps) {
         </span>
         <div className="relative">
           <img 
-            src="/icons/icon-192x192.png" 
+            src="/icons/logo-gdf.png" 
             alt="Logo Ouvidoria GDF" 
-            className="w-12 h-12"
+            className="h-14 w-auto"
           />
         </div>
         <span className="text-2xl font-bold text-foreground tracking-wide">

@@ -44,13 +44,6 @@ export type Database = {
             referencedRelation: "manifestacoes"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "comentarios_manifestacao_id_fkey"
-            columns: ["manifestacao_id"]
-            isOneToOne: false
-            referencedRelation: "manifestacoes_public"
-            referencedColumns: ["id"]
-          },
         ]
       }
       manifestacoes: {
@@ -95,6 +88,42 @@ export type Database = {
           texto?: string
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      manifestacoes_public: {
+        Row: {
+          assunto: string
+          created_at: string
+          divulgacoes: number
+          id: string
+          localidade: string | null
+          respondida: boolean
+          status: string
+          texto: string
+          updated_at: string
+        }
+        Insert: {
+          assunto: string
+          created_at?: string
+          divulgacoes?: number
+          id: string
+          localidade?: string | null
+          respondida?: boolean
+          status?: string
+          texto: string
+          updated_at?: string
+        }
+        Update: {
+          assunto?: string
+          created_at?: string
+          divulgacoes?: number
+          id?: string
+          localidade?: string | null
+          respondida?: boolean
+          status?: string
+          texto?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -170,13 +199,6 @@ export type Database = {
             referencedRelation: "manifestacoes"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "respostas_manifestacao_id_fkey"
-            columns: ["manifestacao_id"]
-            isOneToOne: false
-            referencedRelation: "manifestacoes_public"
-            referencedColumns: ["id"]
-          },
         ]
       }
       user_roles: {
@@ -202,48 +224,7 @@ export type Database = {
       }
     }
     Views: {
-      manifestacoes_public: {
-        Row: {
-          anexos: string[] | null
-          assunto: string | null
-          created_at: string | null
-          divulgacoes: number | null
-          id: string | null
-          localidade: string | null
-          protocolo: string | null
-          respondida: boolean | null
-          status: string | null
-          texto: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          anexos?: string[] | null
-          assunto?: string | null
-          created_at?: string | null
-          divulgacoes?: number | null
-          id?: string | null
-          localidade?: string | null
-          protocolo?: string | null
-          respondida?: boolean | null
-          status?: string | null
-          texto?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          anexos?: string[] | null
-          assunto?: string | null
-          created_at?: string | null
-          divulgacoes?: number | null
-          id?: string | null
-          localidade?: string | null
-          protocolo?: string | null
-          respondida?: boolean | null
-          status?: string | null
-          texto?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       has_role: {
@@ -251,6 +232,10 @@ export type Database = {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
+        Returns: boolean
+      }
+      publish_manifestacao: {
+        Args: { _manifestacao_id: string }
         Returns: boolean
       }
     }

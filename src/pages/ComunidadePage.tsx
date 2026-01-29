@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
-import { Clock, MapPin, MessageSquare, Share2, ShieldAlert } from "lucide-react";
+import { Clock, MapPin, MessageSquare, Share2 } from "lucide-react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { Skeleton } from "@/components/ui/skeleton";
 
 interface Post {
   id: string;
@@ -16,7 +14,6 @@ interface Post {
   respondida: boolean;
   divulgacoes: number;
   comentarios: number;
-  anonima: boolean;
 }
 
 const mockPosts: Post[] = [
@@ -30,11 +27,10 @@ const mockPosts: Post[] = [
     respondida: false,
     divulgacoes: 27,
     comentarios: 4,
-    anonima: false,
   },
   {
     id: "2",
-    autor: "Cidadão Anônimo",
+    autor: "Maria Aparecida",
     localidade: "Lago Norte",
     tempo: "4h",
     assunto: ["Mobilidade Urbana", "Faixas de pedestre"],
@@ -42,7 +38,6 @@ const mockPosts: Post[] = [
     respondida: true,
     divulgacoes: 15,
     comentarios: 8,
-    anonima: true,
   },
 ];
 
@@ -111,23 +106,13 @@ export default function ComunidadePage() {
               {/* Header */}
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    post.anonima 
-                      ? "bg-accent/20" 
-                      : "bg-card-foreground/20"
-                  }`}>
-                    {post.anonima ? (
-                      <ShieldAlert className="w-5 h-5 text-accent" />
-                    ) : (
-                      <span className="text-card-foreground font-bold text-sm">
-                        {post.autor.charAt(0)}
-                      </span>
-                    )}
+                  <div className="w-10 h-10 rounded-full bg-card-foreground/20 flex items-center justify-center">
+                    <span className="text-card-foreground font-bold text-sm">
+                      {post.autor.charAt(0)}
+                    </span>
                   </div>
                   <div>
-                    <p className={`font-bold ${post.anonima ? "text-accent" : "text-card-foreground"}`}>
-                      {post.anonima ? "Cidadão Anônimo" : post.autor}
-                    </p>
+                    <p className="font-bold text-card-foreground">{post.autor}</p>
                     <p className="text-card-foreground/60 text-sm">{post.localidade}</p>
                   </div>
                 </div>

@@ -49,7 +49,6 @@ export type Database = {
       manifestacoes: {
         Row: {
           anexos: string[] | null
-          anonima: boolean
           assunto: string
           created_at: string
           divulgacoes: number
@@ -64,7 +63,6 @@ export type Database = {
         }
         Insert: {
           anexos?: string[] | null
-          anonima?: boolean
           assunto: string
           created_at?: string
           divulgacoes?: number
@@ -79,7 +77,6 @@ export type Database = {
         }
         Update: {
           anexos?: string[] | null
-          anonima?: boolean
           assunto?: string
           created_at?: string
           divulgacoes?: number
@@ -96,7 +93,6 @@ export type Database = {
       }
       manifestacoes_public: {
         Row: {
-          anonima: boolean
           assunto: string
           created_at: string
           divulgacoes: number
@@ -108,7 +104,6 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          anonima?: boolean
           assunto: string
           created_at?: string
           divulgacoes?: number
@@ -120,7 +115,6 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          anonima?: boolean
           assunto?: string
           created_at?: string
           divulgacoes?: number

@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Paperclip, Shield, ShieldAlert } from "lucide-react";
+import { Paperclip } from "lucide-react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Switch } from "@/components/ui/switch";
 
 const assuntos = [
   "Transporte Metrô",
@@ -24,7 +23,6 @@ export default function ManifestarAssuntoPage() {
   const [buscaAssunto, setBuscaAssunto] = useState("");
   const [arquivos, setArquivos] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [anonima, setAnonima] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -146,52 +144,6 @@ export default function ManifestarAssuntoPage() {
                 <p key={i} className="text-foreground/80 text-sm">{f.name}</p>
               ))}
             </div>
-          )}
-        </motion.div>
-
-        {/* Anonymous option */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
-          className="bg-card rounded-xl p-4 border-2 border-primary/20"
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              {anonima ? (
-                <ShieldAlert className="w-6 h-6 text-accent" />
-              ) : (
-                <Shield className="w-6 h-6 text-muted-foreground" />
-              )}
-              <div>
-                <h4 className="font-semibold text-card-foreground">
-                  Manifestação Anônima
-                </h4>
-                <p className="text-sm text-muted-foreground">
-                  Sua identidade não será revelada publicamente
-                </p>
-              </div>
-            </div>
-            <Switch
-              checked={anonima}
-              onCheckedChange={setAnonima}
-              aria-label="Manifestação anônima"
-            />
-          </div>
-          
-          {anonima && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              className="mt-3 p-3 bg-accent/10 rounded-lg border border-accent/30"
-            >
-              <p className="text-sm text-accent font-medium">
-                ✓ Sua manifestação será identificada como "Cidadão Anônimo"
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                Você ainda poderá acompanhar o status da sua manifestação, mas sua identidade ficará protegida.
-              </p>
-            </motion.div>
           )}
         </motion.div>
 

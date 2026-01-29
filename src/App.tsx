@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./providers/AuthProvider";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
-import { InstallPrompt } from "./components/pwa/InstallPrompt";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AuthPage from "./pages/AuthPage";
@@ -28,7 +27,6 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <InstallPrompt />
         <BrowserRouter>
           <Routes>
             {/* Public routes */}

@@ -136,9 +136,9 @@
     @apply hover:scale-[1.02] hover:shadow-lg hover:shadow-accent/20 active:scale-[0.98];
   }
 
-  /* Header styles */
+  /* Header styles - GDF blue #0066B3 */
   .app-header {
-    background: linear-gradient(180deg, hsl(220 60% 28%) 0%, hsl(220 60% 20%) 100%);
+    background: #0066B3;
     @apply py-4 px-6;
   }
 

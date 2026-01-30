@@ -34,26 +34,34 @@ export default function ManifestarPage() {
       return;
     }
 
+    // If already listening, stop
+    if (isListening) {
+      return;
+    }
+
     const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
     const recognition = new SpeechRecognition();
     
     recognition.lang = 'pt-BR';
-    recognition.continuous = true;
-    recognition.interimResults = true;
+    recognition.continuous = false; // Changed to false to prevent duplications
+    recognition.interimResults = false; // Changed to false - only get final results
 
     recognition.onstart = () => {
       setIsListening(true);
     };
 
     recognition.onresult = (event: any) => {
-      let finalTranscript = '';
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        if (event.results[i].isFinal) {
-          finalTranscript += event.results[i][0].transcript + ' ';
+      // Get only the final transcript from the last result
+      const lastResult = event.results[event.results.length - 1];
+      if (lastResult.isFinal) {
+        const transcript = lastResult[0].transcript.trim();
+        if (transcript) {
+          setTexto(prev => {
+            // Add space before new text if previous text exists and doesn't end with space
+            const separator = prev && !prev.endsWith(' ') ? ' ' : '';
+            return prev + separator + transcript;
+          });
         }
-      }
-      if (finalTranscript) {
-        setTexto(prev => prev + finalTranscript);
       }
     };
 
@@ -67,12 +75,7 @@ export default function ManifestarPage() {
     };
 
     recognition.start();
-
-    // Stop after 30 seconds
-    setTimeout(() => {
-      recognition.stop();
-    }, 30000);
-  }, [toast]);
+  }, [toast, isListening, t]);
 
   const handleAvancar = () => {
     if (texto.length < 20) {

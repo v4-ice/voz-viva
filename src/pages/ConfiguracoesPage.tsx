@@ -1,12 +1,13 @@
 import { AppLayout } from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { Volume2, Eye, Bell, Moon, Sun } from "lucide-react";
+import { Volume2, Eye, Bell } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { useState } from "react";
+import { useAccessibility } from "@/contexts/AccessibilityContext";
 
 const ConfiguracoesPage = () => {
-  const [altoContraste, setAltoContraste] = useState(false);
+  const { altoContraste, setAltoContraste } = useAccessibility();
   const [notificacoes, setNotificacoes] = useState(true);
   const [leituraVoz, setLeituraVoz] = useState(true);
   const [volumeVoz, setVolumeVoz] = useState([80]);

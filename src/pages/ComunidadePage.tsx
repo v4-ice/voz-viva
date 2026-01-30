@@ -3,6 +3,9 @@ import { Clock, MapPin, MessageSquare, Share2 } from "lucide-react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface Post {
   id: string;
@@ -14,32 +17,8 @@ interface Post {
   respondida: boolean;
   divulgacoes: number;
   comentarios: number;
+  anonima: boolean;
 }
-
-const mockPosts: Post[] = [
-  {
-    id: "1",
-    autor: "Fulano de Tal",
-    localidade: "Taguatinga",
-    tempo: "34 min",
-    assunto: ["Transporte", "Metrô"],
-    texto: "Hoje de manhã, na estação de Taguatinga, o metrô demorou muito mais do que o normal para passar e ninguém avisou nada. Ficamos todos esperando na plataforma sem saber...",
-    respondida: false,
-    divulgacoes: 27,
-    comentarios: 4,
-  },
-  {
-    id: "2",
-    autor: "Maria Aparecida",
-    localidade: "Lago Norte",
-    tempo: "4h",
-    assunto: ["Mobilidade Urbana", "Faixas de pedestre"],
-    texto: "Moro no Lago Norte e tenho percebido que as faixas de pedestres da região não estão sendo respeitadas pelos...",
-    respondida: true,
-    divulgacoes: 15,
-    comentarios: 8,
-  },
-];
 
 const filtros = [
   "Últimas postagens",
@@ -50,8 +29,61 @@ const filtros = [
 
 export default function ComunidadePage() {
   const [filtroAtivo, setFiltroAtivo] = useState("Últimas postagens");
-  const [posts, setPosts] = useState<Post[]>(mockPosts);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchManifestacoes();
+  }, [filtroAtivo]);
+
+  const fetchManifestacoes = async () => {
+    setLoading(true);
+    try {
+      let query = supabase
+        .from("manifestacoes_public")
+        .select("*");
+
+      // Aplicar filtros
+      if (filtroAtivo === "Respondidas") {
+        query = query.eq("respondida", true);
+      } else if (filtroAtivo === "Mais relevantes") {
+        query = query.order("divulgacoes", { ascending: false });
+      } else {
+        query = query.order("created_at", { ascending: false });
+      }
+
+      const { data, error } = await query.limit(20);
+
+      if (error) {
+        console.error("Erro ao buscar manifestações:", error);
+        return;
+      }
+
+      if (data) {
+        const formattedPosts: Post[] = data.map((item) => ({
+          id: item.id,
+          autor: item.anonima ? "Anônimo" : "Cidadão",
+          localidade: item.localidade || "Distrito Federal",
+          tempo: formatDistanceToNow(new Date(item.created_at), { 
+            addSuffix: false, 
+            locale: ptBR 
+          }),
+          assunto: [item.assunto],
+          texto: item.texto,
+          respondida: item.respondida,
+          divulgacoes: item.divulgacoes || 0,
+          comentarios: 0,
+          anonima: item.anonima,
+        }));
+        setPosts(formattedPosts);
+      }
+    } catch (error) {
+      console.error("Erro:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <AppLayout showBackBar backLabel="Voltar para tela inicial">
@@ -91,6 +123,23 @@ export default function ComunidadePage() {
           </button>
         </motion.div>
 
+        {/* Loading state */}
+        {loading && (
+          <div className="text-center py-8">
+            <p className="text-foreground/70">Carregando manifestações...</p>
+          </div>
+        )}
+
+        {/* Empty state */}
+        {!loading && posts.length === 0 && (
+          <div className="text-center py-8">
+            <p className="text-foreground/70">Nenhuma manifestação encontrada.</p>
+            <p className="text-foreground/50 text-sm mt-2">
+              Seja o primeiro a criar uma manifestação!
+            </p>
+          </div>
+        )}
+
         {/* Posts */}
         <div className="space-y-4">
           {posts.map((post, index) => (
@@ -122,9 +171,9 @@ export default function ComunidadePage() {
                     {post.tempo}
                   </div>
                   <span className={`text-xs font-medium ${
-                    post.respondida ? "text-success" : "text-destructive"
+                    post.respondida ? "text-green-600" : "text-orange-500"
                   }`}>
-                    {post.respondida ? "Respondida" : "Não respondida"}
+                    {post.respondida ? "Respondida" : "Aguardando"}
                   </span>
                 </div>
               </div>
@@ -143,6 +192,14 @@ export default function ComunidadePage() {
               <p className="text-card-foreground text-sm line-clamp-3">
                 {post.texto}
               </p>
+
+              {/* Footer */}
+              <div className="flex items-center gap-4 mt-3 pt-3 border-t border-card-foreground/10">
+                <div className="flex items-center gap-1 text-card-foreground/60 text-sm">
+                  <Share2 className="w-4 h-4" />
+                  {post.divulgacoes}
+                </div>
+              </div>
             </motion.div>
           ))}
         </div>
